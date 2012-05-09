@@ -1,11 +1,11 @@
 Nodetime - Performance Profiler for Node.js
 ===========================================
 
-Nodetime reveals response time and other internals of HTTP requests and underlying HTTP/database calls in your Node.js application. Coupled with related process and OS state information it enables tracing performance problems down to the root cause. Nodetime supports multiple APIs including native HTTP client, file system, cluster and sockets, Socket.io, Redis, MongoDB, MySQL, PostgreSQL, Memcached and Cassandra. HTTP based data stores like CouchDB and Riak are supported via HTTP API. 
+Nodetime reveals response time and other internals of HTTP requests and underlying HTTP, database, file system and other API calls in your Node.js application. Coupled with related process and OS state information it enables tracing performance problems down to the root cause. Nodetime supports multiple APIs including native HTTP client, file system, cluster and sockets, Socket.io, Redis, MongoDB, MySQL, PostgreSQL, Memcached and Cassandra. HTTP based data stores like CouchDB and Riak are supported via HTTP API. 
 
-The profiler running within the application securely sends profiling data to the Nodetime server, where it is stored and sent to the browser in real-time. Profiling data is kept on the server only for 10 minutes.
+The profiler running within the application securely sends profiling data to the Nodetime server, which forwards it to the browser in real-time.
 
-Nodetime is a high level profiler. By hooking up to various APIs it gives developers clear API level visibility of performance, i.e. time and CPU usage, averages, stack traces and much more.
+Nodetime is a high level profiler designed to run in prdocution environments. By hooking up to various APIs it gives developers clear API level visibility of performance, i.e. time and CPU usage, averages, stack traces and much more.
 
 
 
