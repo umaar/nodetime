@@ -55,7 +55,7 @@ By default Nodetime will send only slowest samples of requests and their operati
 `profile(options)` - starts the profiler. Options are:
 
 * `headless` - if true, no data is sent to the server
-* `dtrace` - activates firing of DTrace probes. Available only in OS X 64 bit and Solaris 32 bit. Provider name is `nodetime` and probe names are `api-call-start` and `api-call-done`. Argumets are as follows: `id`, `scope` and `command` 
+* `dtrace` - activates firing of DTrace probes. Available only in OS X 64 bit and Solaris 32 bit. Provider name is `nodetime` and probe names are `api-call-start` and `api-call-done`. Argumets are as follows: `id`, `scope` and `command`. More about DTrace support in the blog post http://nodetime.com/blog/trace-api-calls-in-dtrace 
 * `stdout` - if true, dumps samples using `console.log()`. Also sets `headless` to true. Explicitly set `headless` to false if you want both, the dump and sending to Nodetime server
 * `debug` - used for debugging nodetime itself, so hopefully you won't need it
 
@@ -68,6 +68,10 @@ By default Nodetime will send only slowest samples of requests and their operati
     nodetime.filter(function(sample) {
       return (sample._ms >= 100); // the sample is ignored if request took less than 100 ms
     })
+
+`time(label[, context])` - marks time measurement start. Optional context parameter is used to pass more information about execution context as hash pairs.
+
+`timeEnd(label[, context])` - marks time measurement end. At this point a sample containing measured interval information, such as response time, CPU time, Operations and related data will be emitted and send to server if not in headless mode. Optional context parameter is used to pass more information about execution context as hash pairs. Read more in the blog post http://nodetime.com/blog/powerful-alternative-to-nodes-console-time.
 
 
 ### Events:
@@ -92,7 +96,7 @@ By default Nodetime will send only slowest samples of requests and their operati
 
 ## Run-time Overhead
 
-Nodetime is based on probes hooked into API calls and callbacks using wrappers. It measures time, adds variables and creates objects, which naturally causes overhead. Although, the probes are mostly attached around calls involving network communication and are triggered only during server requests, which makes the overhead insignificant. However, it is recommended to measure overhead for specific cases.
+Nodetime is based on probes hooked into API calls and callbacks using wrappers. It measures time, adds variables and creates objects, which naturally causes overhead. A significant part of the overhead is the reading of stack traces of sampled operations taking a couple of hundred microseconds, but which is limited to 1000 stack traces per minute to make sure lowest possible overhead for systems under load. Although, the probes are mostly attached around calls involving network communication, which makes the overhead insignificant. However, it is recommended to measure overhead for specific cases.
 
 
 ## License
