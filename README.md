@@ -21,17 +21,10 @@ The following call should be placed before any other require statement in your a
 
 After your start your application, a link of the form `https://nodetime.com/[session_id]` will be printed to the console, where the session will be your unique id for accessing the profiler server. Copy the link into your browser and you're done! No need to refresh the browser, new data will appear as it arrives from the profiler.
 
-It is possible to get session id programmatically:
-
-    var nodetime = require('nodetime');
-    nodetime.on('session', function(id) {
-      // do something with session id here
-    });
-    nodetime.profile();
+See the API section on how to get the session id programmatically.
 
 
-
-## Modes of Operation
+### Modes of Operation
 
 Profiler running in the application is automatically activated only at startup and when there is a profiling session from nodetime.com, i.e. the page is open in your browser. After profiling session is ended the profiler is automatically deactivated within minutes. If profiler runs in headless mode, it should be resumed programmatically using the API, otherwise it will be paused automatically. 
 
@@ -40,9 +33,30 @@ Nodetime automatically detects if an application is running under constant load,
 It is also possible to disable sending profiling data to the web console and dump everything to the console by passing `headless` flag at initialization, e.g. `require('nodetime').profile({headless: true})`. Other possibilities to output profiling result are through local API, dtrace and stdout.
 
 
-## Filtering
+## Features
 
-By default Nodetime will send only slowest samples of requests and their operations to the profiler web console (though still emitting all samples on the local API level). For systems under load, this can result in making the faster but more important requests invisible. Filtering allows you to specify what exactly you want to see. For example, you can specify to sample only those requests, which are slower than 100ms or match a certain URL pattern. Or, requests, which have an underlying database call to a database on specific machine with given IP address. While API gives you the full power of programmatic filtering, profiling data viewer at nodetime.com makes it a few clicks to filter samples down to very specific ones. 
+### Request Sampling
+A core feature of Nodetime, which gives you visibility of what's happening inside your application by showing requests with a lot of information, including response time, CPU time, operations such as database calls, http client requests, file system and other API calls, which happened at the same time. And this all completed with related context information and application state.
+
+
+### Custom Sampling
+Nodetime samples requests and some Socket.io communication out of the box. For other types of applications or a specific operation tracing needs it provides simple API functions and extension mechanisms. Using time() and timeEnd() functions will tell a lot about enclosed code segment. Read more in the blog post A [Powerful Alternative to Node's console.time()](http://nodetime.com/blog/powerful-alternative-to-nodes-console-time).
+
+
+### Sample Filtering
+If there are too many requests or operations handled by the application, Nodetime will send only slowest samples of requests and their operations to the profiler web console (though still emitting all samples on the local API level). For systems under load, this can result in making the faster but more important requests invisible. Filtering allows you to specify what exactly you want to see. For example, you can specify to sample only those requests, which are slower than 100ms or match a certain URL pattern. Or, requests, which have an underlying database call to a database on specific machine with given IP address. While API gives you the full power of programmatic filtering, profiling web console at nodetime.com makes it a few clicks to filter samples down to very specific ones.
+
+
+### CPU Profiling
+As a logical next step after detecting high CPU utilization, Nodetime makes it increadably easy to use V8's built-in sampling CPU profiler to analyze hot spots and locate inefficient functions. Read more about using CPU profiler in the blog post [CPU Profiling with Nodetime](http://nodetime.com/blog/cpu-profiling-with-nodetime).
+
+
+### Metrics
+Nodetime also displays short term metrics in web console to highlight current state and dynamics. Charts include OS Load average and free memory, Node's RSS and Heap size as well as average response / CPU times and counts for HTTP client / server requests and supported API calls and libraries, e.g. File System, Redis, MongoDB, MySQL, PostgreSQL, Memcached and Cassandra.
+
+
+### DTrace
+Nodetime can fire DTrace probes on API-level calls it catches. This opens up powerful analytics possibilities on supported systems. Read more in the blog post [Trace API Calls In DTrace](http://nodetime.com/blog/trace-api-calls-in-dtrace).
 
 
 ## API
@@ -55,7 +69,7 @@ By default Nodetime will send only slowest samples of requests and their operati
 `profile(options)` - starts the profiler. Options are:
 
 * `headless` - if true, no data is sent to the server
-* `dtrace` - activates firing of DTrace probes. Available only in OS X 64 bit and Solaris 32 bit. Provider name is `nodetime` and probe names are `api-call-start` and `api-call-done`. Argumets are as follows: `id`, `scope` and `command`. More about DTrace support in the blog post http://nodetime.com/blog/trace-api-calls-in-dtrace 
+* `dtrace` - activates firing of DTrace probes. Available only in OS X 64 bit and Solaris 32 bit. Provider name is `nodetime` and probe names are `api-call-start` and `api-call-done`. Argumets are as follows: `id`, `scope` and `command`. More about DTrace support in the blog post [Trace API Calls in DTrace](http://nodetime.com/blog/trace-api-calls-in-dtrace)
 * `stdout` - if true, dumps samples using `console.log()`. Also sets `headless` to true. Explicitly set `headless` to false if you want both, the dump and sending to Nodetime server
 * `debug` - used for debugging nodetime itself, so hopefully you won't need it
 
@@ -71,7 +85,7 @@ By default Nodetime will send only slowest samples of requests and their operati
 
 `time(label[, context])` - marks time measurement start. Optional context parameter is used to pass more information about execution context as hash pairs.
 
-`timeEnd(label[, context])` - marks time measurement end. At this point a sample containing measured interval information, such as response time, CPU time, Operations and related data will be emitted and send to server if not in headless mode. Optional context parameter is used to pass more information about execution context as hash pairs. Read more in the blog post http://nodetime.com/blog/powerful-alternative-to-nodes-console-time.
+`timeEnd(label[, context])` - marks time measurement end. At this point a sample containing measured interval information, such as response time, CPU time, Operations and related data will be emitted and send to server if not in headless mode. Optional context parameter is used to pass more information about execution context as hash pairs. Read more in the blog post [A Powerful Alternative to Node's console.time()](http://nodetime.com/blog/powerful-alternative-to-nodes-console-time).
 
 
 ### Events:
