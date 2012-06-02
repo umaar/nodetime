@@ -22,7 +22,7 @@
  */
 
 
-require('nodetime').profile({debug: true});
+require('nodetime').profile({debug: true, server: 'http://dev.nodetime.com:8080'});
 
 process.on('uncaughtException', function (err) {
   console.error(err, err.stack)
