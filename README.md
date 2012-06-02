@@ -35,8 +35,8 @@ It is also possible to disable sending profiling data to the web console and dum
 
 ## Features
 
-### Request Sampling
-A core feature of Nodetime, which gives you visibility of what's happening inside your application by showing requests with a lot of information, including response time, CPU time, operations such as database calls, http client requests, file system and other API calls, which happened at the same time. And this all completed with related context information and application state.
+### Request and Operation Sampling
+A core feature of Nodetime, which gives you visibility of what's happening inside your application by showing requests and operations, e.g. API calls, with a lot of information, including response time, CPU time, operations such as database calls, http client requests, file system and other API calls, which happened at the same time. And this all completed with related context information and application state.
 
 
 ### Custom Sampling
@@ -61,17 +61,17 @@ Nodetime can fire DTrace probes on API-level calls it catches. This opens up pow
 
 ## API
 
-`require('nodetime')` - returns a singleton instance of Nodetime object
+`require('nodetime')` - returns a singleton instance of Nodetime object.
 
 
 ### Methods:
 
 `profile(options)` - starts the profiler. Options are:
 
-* `headless` - if true, no data is sent to the server
-* `dtrace` - activates firing of DTrace probes. Available only in OS X 64 bit and Solaris 32 bit. Provider name is `nodetime` and probe names are `api-call-start` and `api-call-done`. Argumets are as follows: `id`, `scope` and `command`. More about DTrace support in the blog post [Trace API Calls in DTrace](http://nodetime.com/blog/trace-api-calls-in-dtrace)
-* `stdout` - if true, dumps samples using `console.log()`. Also sets `headless` to true. Explicitly set `headless` to false if you want both, the dump and sending to Nodetime server
-* `debug` - used for debugging nodetime itself, so hopefully you won't need it
+* `headless` - if true, no data is sent to the server.
+* `stdout` - if true, dumps samples using `console.log()`. Also sets `headless` to true. Explicitly set `headless` to false if you want both, the dump and sending to Nodetime server.
+* `dtrace` - activates firing of DTrace probes. Available only in OS X 64 bit and Solaris 32 bit. DTrace provider dependency should be installed manually with `npm install dtrace-provider`. Provider name is `nodetime` and probe names are `api-call-start` and `api-call-done`. Argumets are as follows: `id`, `scope` and `command`. More about DTrace support in the blog post [Trace API Calls in DTrace](http://nodetime.com/blog/trace-api-calls-in-dtrace).
+* `debug` - used for debugging nodetime itself, so hopefully you won't need it.
 
 `pause()` - deactivaties the profiler.
 
@@ -102,7 +102,7 @@ Nodetime can fire DTrace probes on API-level calls it catches. This opens up pow
 * `begin` - start time of the call
 * `end` - end time of the call
 * `ms` - duration of the call
-* `cpuTime` - time spend in CPU
+* `cputime` - time spent in CPU
 
 
 `on('value', function(value) {})` - Emits variable values, e.g. "average response time", "load average", etc. `value` is a JSON object with fields `scope`, `name`, `value`, `op` and a caouple of meta properties. 

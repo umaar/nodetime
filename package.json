@@ -19,10 +19,10 @@
     "agent.io": "*"
   },
   "optionalDependencies": {
-    "timekit": "*",
-    "dtrace-provider": "*"
+    "timekit": "*"
   },
   "devDependencies": {
+    "dtrace-provider": "*",
     "express": ">=2.5.0",
     "socket.io": ">=0.9.0", 
     "redis": ">=0.7.0",
