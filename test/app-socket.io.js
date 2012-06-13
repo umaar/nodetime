@@ -22,7 +22,7 @@
  */
 
 
-require('nodetime').profile({debug: true, server: 'http://dev.nodetime.com:8080'});
+require('nodetime').profile({debug: true});
 
 process.on('uncaughtException', function (err) {
   console.error(err, err.stack)
@@ -46,13 +46,11 @@ var io = require('socket.io').listen(app);
 
 io.sockets.on('connection', function (socket) {
   socket.on('ping', function (data) {
-    probes(process.argv.slice(2), function() {
-      socket.emit('pong', data + ' first');
-  
-      probes(function() {
-        socket.emit('pong', data + ' second');
-      });
+    socket.emit('pong', data + ' first', function() {
+      console.log('message received');
     });
+  
+    socket.emit('pong', data + ' second');
   });
 });
 

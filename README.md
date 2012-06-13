@@ -23,6 +23,7 @@ After your start your application, a link of the form `https://nodetime.com/[ses
 
 See the API section on how to get the session id programmatically.
 
+**Note**: installing Nodetime on Heroku requres explicit installation of `timekit` module, which is a dependency of nodetime and is automatically installed on other platforms.
 
 ### Modes of Operation
 
@@ -31,6 +32,20 @@ Profiler running in the application is automatically activated only at startup a
 Nodetime automatically detects if an application is running under constant load, e.g. production, or it is being tested or debugged. If the server is under load Nodetime will capture and send only slowest requests and related information. A custom filtering of samples is possible at profiler level allowing to keep only necessary samples.
 
 It is also possible to disable sending profiling data to the web console and dump everything to the console by passing `headless` flag at initialization, e.g. `require('nodetime').profile({headless: true})`. Other possibilities to output profiling result are through local API, dtrace and stdout.
+
+
+### Nodetime Pro
+
+Designed for frequent development and production use, Nodetime Pro allows you to connect your applications to your account directly and persistently, instead of using instance-based temporary sessions.
+
+Several applications can be associated with one account and can also be groupped by application name. Here is how the profiler initialization statement will look like:
+
+  require('nodetime').profile({
+      accountKey: 'your_account_key', 
+      appName: 'your_application_name'
+    });
+
+[Sign up](http://nodetime.com/pro) now or [learn more](http://nodetime.com/blog/nodetime-pro) about Nodetime Pro.
 
 
 ## Features
@@ -87,6 +102,7 @@ Nodetime can fire DTrace probes on API-level calls it catches. This opens up pow
 
 `timeEnd(label[, context])` - marks time measurement end. At this point a sample containing measured interval information, such as response time, CPU time, Operations and related data will be emitted and send to server if not in headless mode. Optional context parameter is used to pass more information about execution context as hash pairs. Read more in the blog post [A Powerful Alternative to Node's console.time()](http://nodetime.com/blog/powerful-alternative-to-nodes-console-time).
 
+`metric(scope, name, value, unit, op)` - aggregates and sends metrics to the web console every minute. `op` argument takes only `val`, `sum` and `avg` values at the moment.
 
 ### Events:
 
