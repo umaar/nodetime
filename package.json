@@ -1,6 +1,6 @@
 {   
   "name" : "nodetime", 
-  "version" : "0.2.11",
+  "version" : "0.2.12",
   "description" : "Performance Profiler",
   "author": "Dmitri Melikyan <dmitri@rapidlogix.com>", 
   "homepage": "http://nodetime.com", 
@@ -19,7 +19,8 @@
     "agent.io": "*"
   },
   "optionalDependencies": {
-    "timekit": "*"
+    "timekit": "*",
+    "v8tools": "*"
   },
   "devDependencies": {
     "dtrace-provider": "*",
